@@ -29,13 +29,13 @@ public abstract class Character : MonoBehaviour {
 	
 	//Update with Time.deltaTime
 	protected virtual void FixedUpdate () {
-			Move(direction.x, direction.y);
+		Move(direction.x, direction.y);
 	}
 	
 	//Move the Character
 	protected void Move(float dirX, float dirY) {
-		direction.x = dirX; //TODO: The reset to 0 does not happen since the method is only triggered when numbers are not 0
-		direction.y = dirY; //TODO: The reset to 0 does not happen since the method is only triggered when numbers are not 0
+		direction.x = dirX; 
+		direction.y = dirY;
 		rb.AddForce(direction.normalized * moveSpeed);
 		
 	}

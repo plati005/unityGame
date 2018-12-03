@@ -1,19 +1,20 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnitySocketIO.SocketIO;
 using UnitySocketIO.Events;
+
 
 namespace UnitySocketIO {
     public class Network : MonoBehaviour {
         
+		//Socket Initialization
         public SocketIOSettings settings;
-
         BaseSocketIO socket;
-
         public string SocketID { get { return socket.SocketID; } }
 
-        void Awake() {
+        private void Awake() {
             if(Application.platform == RuntimePlatform.WebGLPlayer) {
                 socket = gameObject.AddComponent<WebGLSocketIO>();
             }
@@ -24,26 +25,51 @@ namespace UnitySocketIO {
             socket.Init(settings);
         }
 		
-			
-		void Start() {
+		//Prefab to spawn other players
+		public GameObject playerPrefab;
+		
+		//Network Initialization
+		private void Start() {
 			socket.Connect();
-			Debug.Log("socket was just connected");
-			
-			/*
-			socket.On("register", (SocketIOEvent e) => {
-				Debug.Log("SocketIO connected");
-			});
-			*/
-			
-			socket.On("keyword", OnRegister);
+
+			socket.On("register", OnRegister);
+			socket.On("spawn", OnSpawned);
 			
 		}
 		
-		void OnRegister (SocketIOEvent e)
+		//Method to confirm connection
+		private void OnRegister (SocketIOEvent e)
 		{
-			Debug.Log ("Succesfully registered");
+			Debug.Log ("Succesfully registered player " + e.data);
+			//socket.Emit("move");
 		}
 			
+		//Method to spawn another player
+		private void OnSpawned (SocketIOEvent e)
+		{
+			Debug.Log ("Another player spawned " + e.data);
+			Instantiate (playerPrefab);
+		}
+		
+		
+		//Move the Character for other people
+		public static void SendMove(float x, float y) {
+			Debug.Log("sending position to node" + DirectionsToJson(x,y));
+			//Send position to server
+			//socket.Emit("move", DirectionsToJson(x,y));
+		}
+		
+		//method for sending position to sockets
+		public static string DirectionsToJson(float x, float y){
+			return string.Format(@"{{""x"":""{0}"", ""y"":""{1}""}}", x, y);
+		}
+		
+		
+		
+		
+		
+		//TODO: Delete below comments
+		//FOR REFERENCE ONLY//
 		/*
 		void Start() {
 		

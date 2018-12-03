@@ -38,6 +38,16 @@ public class SocketTestWebGL : MonoBehaviour {
             Debug.Log(e.data);
 			sprite.color = Color.blue;
         });
+		
+		io.On("register", (SocketIOEvent e) => {
+            Debug.Log("CORA");
+        });
+		
+		/*
+		io.On("keyword", (SocketIOEvent e) => {
+            Debug.Log("registered");
+        });
+		*/
     }
 
 }

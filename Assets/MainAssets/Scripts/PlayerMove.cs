@@ -3,24 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMove : Character {
-
+	
+	//Direction of Player
 	private float dirX, dirY;
 	
+	//Link PlayerMove to Network script
+	//private NetMove netMove;
+	public GameObject network;
+	
 	//Health related values
-	//TODO: Move into Character
 	public Stat health;
 	public float iniHealth=100;
 	
 	//Mana related values
-	//TODO: Move into Character
 	public Stat mana;
 	public float iniMana=50;
 	
 	//Initialization
 	protected override void Start() {
 		
+		//Connect to NetMove script
+		//netMove = GetComponent<NetMove>();
+		
+		
 		//Health and Mana initialization
-		//TODO: Move into Character
 		health.Initialize(iniHealth,iniHealth);
 		mana.Initialize(iniMana,iniMana);
 		
@@ -54,17 +60,19 @@ public class PlayerMove : Character {
 	protected override void FixedUpdate () {
 		
 		//Here should be my trigger
-		//if (IsMovingTrigger) {
+		//TODO: Check performance if IF statement is removed
+		if (IsMovingTrigger) {
 			Move(dirX, dirY);
-				
-			//send pos to node
-			//Debug.Log("sending position to node" + Network.VectorToJson(position));
-			//socket.Emit("move", new JSONObject(Network.VectorToJson(position)));
-		//}
+			//var script = network.GetComponent<NetworkTwo>();
+			NetworkTwo.SendMove(dirX, dirY);
+		}
+		//Else needed for animation to revert to Idle
+		else {
+			Move(0,0);
+		}
 		
 	}
 	
-	//TODO: Delete this
 	//Determine if Character was triggered to move
 	private bool IsMovingTrigger {
 		get {
@@ -72,21 +80,5 @@ public class PlayerMove : Character {
 		}
 	}
 
-	
 
-	//TODO: To be used
-	/*
-	
-	//network move
-	public void OnMove(Vector2 position){
-		//send pos to node
-		Debug.Log("sending position to node" + Network.VectorToJson(position));
-		//socket.Emit("move", new JSONObject(Network.VectorToJson(position)));
-	}
-	
-	//method for sending position to sockets
-	string VectorToJson(Vector2 vector){
-		return string.Format(@"{{""x"":""{0}"", ""y"":""{1}""}}", vector.x, vector.y);
-	}
-	*/
 }
