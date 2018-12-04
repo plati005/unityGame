@@ -54,9 +54,9 @@
      <Compile Include="Assets\MainAssets\Scripts\Character.cs" />
      <Compile Include="Assets\MainAssets\Scripts\NetMove.cs" />
      <Compile Include="Assets\MainAssets\Scripts\Network.cs" />
-     <Compile Include="Assets\MainAssets\Scripts\NetworkTwo.cs" />
      <Compile Include="Assets\MainAssets\Scripts\PlayerMove.cs" />
      <Compile Include="Assets\MainAssets\Scripts\Stat.cs" />
+     <Compile Include="Assets\MainAssets\Scripts\zCancel - Network.cs" />
      <Compile Include="Assets\MainAssets\Scripts\zCancel - SocketTestWebGL.cs" />
      <Compile Include="Assets\UnitySocketIO\Scripts\Data\SocketOpenData.cs" />
      <Compile Include="Assets\UnitySocketIO\Scripts\Events\Ack.cs" />

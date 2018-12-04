@@ -7,9 +7,8 @@ public class PlayerMove : Character {
 	//Direction of Player
 	private float dirX, dirY;
 	
-	//Link PlayerMove to Network script
-	//private NetMove netMove;
-	public GameObject network;
+	//Attach NetMove Script
+	private NetMove netMove;
 	
 	//Health related values
 	public Stat health;
@@ -22,9 +21,8 @@ public class PlayerMove : Character {
 	//Initialization
 	protected override void Start() {
 		
-		//Connect to NetMove script
-		//netMove = GetComponent<NetMove>();
-		
+		//Initialize NetMove script
+		netMove = GetComponent<NetMove>();
 		
 		//Health and Mana initialization
 		health.Initialize(iniHealth,iniHealth);
@@ -37,8 +35,11 @@ public class PlayerMove : Character {
 	//Update is called once per frame
 	protected override void Update () {
 		//Get inputs
+		//TODO: Null reference = server on, no null reference = server off
+		//TODO: It may just be that I need to delete the duplicate player
 		dirX = Input.GetAxisRaw("Horizontal");
 		dirY = Input.GetAxisRaw("Vertical");
+		//Debug.Log("dirX is:"+dirX+", dirY is:"+dirY);
 		
 		//Include Character Update
 		base.Update();
@@ -63,8 +64,7 @@ public class PlayerMove : Character {
 		//TODO: Check performance if IF statement is removed
 		if (IsMovingTrigger) {
 			Move(dirX, dirY);
-			//var script = network.GetComponent<NetworkTwo>();
-			NetworkTwo.SendMove(dirX, dirY);
+			netMove.SendMove(dirX, dirY);
 		}
 		//Else needed for animation to revert to Idle
 		else {
@@ -73,7 +73,7 @@ public class PlayerMove : Character {
 		
 	}
 	
-	//Determine if Character was triggered to move
+	//Determine if Character was triggered to move via Input specifically
 	private bool IsMovingTrigger {
 		get {
 			return dirX != 0 || dirY != 0;

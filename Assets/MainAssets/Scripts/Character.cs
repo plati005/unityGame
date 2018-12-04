@@ -65,7 +65,7 @@ public abstract class Character : MonoBehaviour {
 	}
 	
 	//Method for use in HandleLayers
-	//TODO: Ensure I can complete attack animations before doing anything else
+	//TODO: Lock character in animation state during attack
 	private void ActivateLayer (string layerName) {
 		//Deactivate all layers
 		for (int i = 0; i < anim.layerCount; i++) {

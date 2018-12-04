@@ -3,27 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnitySocketIO.SocketIO;
 using UnitySocketIO.Events;
+using UnitySocketIO;
 
 public class NetMove : MonoBehaviour {
-	/*
-	public GameObject network;
-	private Network netScript;
 	
-	private void Start () {
-		netScript = network.GetComponent<Network>();
-	}
+	//Link this script to the Network
+	public SocketIOController socket;
 	
-	//TODO: This script can be moved into Network
 	//Move the Character for other people
-	public void OnMove(float x, float y) {
-		Debug.Log("sending position to node" + DirectionsToJson(x,y));
+	public void SendMove(float x, float y) {
+		Debug.Log("sending position to node" + Network.DirectionsToJson(x,y));
 		//Send position to server
-		//netScript.socket.Emit("move", new JSONObject(DirectionsToJson(x,y)));
+		socket.Emit("move", Network.DirectionsToJson(x,y));
 	}
 	
-	//method for sending position to sockets
-	public string DirectionsToJson(float x, float y){
-		return string.Format(@"{{""x"":""{0}"", ""y"":""{1}""}}", x, y);
-	}
-	*/
+
 }
