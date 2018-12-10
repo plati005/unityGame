@@ -1,4 +1,6 @@
 Assets/UnitySocketIO
 Library
-ProjectSettings
 Temp
+Assembly-CSharp.csproj
+unityGame.sln
+Packages

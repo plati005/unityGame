@@ -11,10 +11,12 @@ public class PlayerMove : Character {
 	private NetMove netMove;
 	
 	//Health related values
+	//TODO: Move health and mana out
 	public Stat health;
 	public float iniHealth=100;
 	
 	//Mana related values
+	//TODO: Move health and mana out
 	public Stat mana;
 	public float iniMana=50;
 	
@@ -25,6 +27,7 @@ public class PlayerMove : Character {
 		netMove = GetComponent<NetMove>();
 		
 		//Health and Mana initialization
+		//TODO: Move health and mana out
 		health.Initialize(iniHealth,iniHealth);
 		mana.Initialize(iniMana,iniMana);
 		
@@ -35,8 +38,6 @@ public class PlayerMove : Character {
 	//Update is called once per frame
 	protected override void Update () {
 		//Get inputs
-		//TODO: Null reference = server on, no null reference = server off
-		//TODO: It may just be that I need to delete the duplicate player
 		dirX = Input.GetAxisRaw("Horizontal");
 		dirY = Input.GetAxisRaw("Vertical");
 		//Debug.Log("dirX is:"+dirX+", dirY is:"+dirY);
@@ -61,7 +62,7 @@ public class PlayerMove : Character {
 	protected override void FixedUpdate () {
 		
 		//Here should be my trigger
-		//TODO: Check performance if IF statement is removed
+		//IF statement exists for performance
 		if (IsMovingTrigger) {
 			Move(dirX, dirY);
 			netMove.SendMove(dirX, dirY);

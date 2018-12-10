@@ -1,9 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnitySocketIO;
 using UnitySocketIO.Events;
+using SimpleJSON;
 
+//Intent of class is to receive from server, not send to server
 public class Network : MonoBehaviour {
+	
+	//TODO: Delete this, it's for testing only
+	public GameObject block;
+	
+	//Json object
+	//TODO: I can use one for spawn, move, and disconnect, but for other actions I will need more
+	private JSONObject playerJson;
 	
 	//Create static socket connection
 	static SocketIOController socket;
@@ -11,33 +21,111 @@ public class Network : MonoBehaviour {
 	//Prefab to spawn other players
 	public GameObject playerPrefab;
 	
+	//Reference to the user's player
+	public GameObject myPlayer;
+	
+	//Player list
+	private Dictionary<string, GameObject> otherPlayers;
+	
 	//Network Initialization
 	private void Start() {
 		socket = GetComponent<SocketIOController>();
 		socket.Connect();
-
+		
+		//Begin socket listening
 		socket.On("register", OnRegister);
 		socket.On("spawn", OnSpawned);
+		socket.On("moved", OnMoved);
+		socket.On("disconnected", OnDisconnected);
+		socket.On("requestPosition", OnRequestPosition);
+		socket.On("updatingPosition", OnUpdatingPosition);
 		
+		//Instantiate player list
+		otherPlayers = new Dictionary<string, GameObject>();
+		
+		//TODO: Delete this, it's for testing only
+		socket.On("test-event", (SocketIOEvent e) => {
+			var purp = block.GetComponent<SpriteRenderer>();
+			purp.color = Color.blue;
+        });
 	}
 	
 	//Method to confirm connection
 	private void OnRegister (SocketIOEvent e)
 	{
 		Debug.Log ("Succesfully registered player " + e.data);
-		//socket.Emit("move");
+		var purp = block.GetComponent<SpriteRenderer>();
+		purp.color = Color.blue;
+	}
+	
+	//Method to send back current position from this player (and all others) to currently spawning player
+	private void OnRequestPosition (SocketIOEvent e)
+	{
+		//Debug.Log ("Another player requested position " + e.data);
+		//Debug.Log ("My current position " + LocationToJson(myPlayer.transform.position));
+		//Will update my position on spawning player's screen
+		socket.Emit("updatePosition", LocationToJson(myPlayer.transform.position));
+	}
+	
+	//Method to update position, if player is not spawning, nothing should happen
+	private void OnUpdatingPosition (SocketIOEvent e)
+	{
+		//Convert string to Json (x, y, id)
+		playerJson = (JSONObject)JSON.Parse(e.data);
+		Debug.Log ("Updating position of another player " + playerJson["x"] + ", " + playerJson["y"] + ", " + playerJson["id"]);
+
+		//Get other player by Id and update their position
+		var teleport = otherPlayers[playerJson["id"]].GetComponent<NetworkPlayer>();
+		teleport.Teleport(float.Parse(playerJson["x"]), float.Parse(playerJson["y"]));
+		//player.transform.position.x = float.Parse(playerJson["x"]);
+		//player.transform.position.y = float.Parse(playerJson["y"]);
 	}
 		
 	//Method to spawn another player
 	private void OnSpawned (SocketIOEvent e)
 	{
-		Debug.Log ("Another player spawned " + e.data);
-		Instantiate (playerPrefab);
+		//Convert string to Json
+		playerJson = (JSONObject)JSON.Parse(e.data);
+		Debug.Log ("Another player spawned " + playerJson["id"]);
+
+		var player = Instantiate (playerPrefab);
+		//Add another player to player list
+		otherPlayers.Add(playerJson["id"], player);
+		Debug.Log("count: " + otherPlayers.Count);
+	}
+	
+	//Method to move NetworkPlayer
+	private void OnMoved (SocketIOEvent e)
+	{
+		//Convert string to Json (x, y, id)
+		playerJson = (JSONObject)JSON.Parse(e.data);
+		Debug.Log ("Another player moved " + playerJson["x"] + ", " + playerJson["y"] + ", " + playerJson["id"]);
+
+		//Get other player by Id and move them
+		var networkMove = otherPlayers[playerJson["id"]].GetComponent<NetworkPlayer>();
+		networkMove.SetDirection(float.Parse(playerJson["x"]), float.Parse(playerJson["y"]));
+	}
+	
+	//Method to disconnect NetworkPlayer
+	private void OnDisconnected (SocketIOEvent e)
+	{
+		//Convert string to Json
+		playerJson = (JSONObject)JSON.Parse(e.data);
+		Debug.Log ("Another player disconnected " + playerJson["id"]);
+		
+		//Delete other player
+		Destroy(otherPlayers[playerJson["id"]]);
+		otherPlayers.Remove(playerJson["id"]);
 	}
 	
 	//Method to convert directions to Json format
 	public static string DirectionsToJson(float x, float y){
 		return string.Format(@"{{""x"":""{0}"", ""y"":""{1}""}}", x, y);
+	}
+	
+	//Method to convert location to Json format
+	public static string LocationToJson(Vector2 location){
+		return string.Format(@"{{""x"":""{0}"", ""y"":""{1}""}}", location.x, location.y);
 	}
 	
 }

@@ -39,6 +39,7 @@ public abstract class Character : MonoBehaviour {
 		rb.AddForce(direction.normalized * moveSpeed);
 		
 	}
+
 	
 	//Determine if Character is moving
 	private bool IsMoving {
