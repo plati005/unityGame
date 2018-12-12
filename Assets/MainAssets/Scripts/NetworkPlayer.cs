@@ -23,12 +23,9 @@ public class NetworkPlayer : Character {
 	
 	//Update with Time.deltaTime, overrides Character move, keeping it here for Network movements
 	protected override void FixedUpdate () {
-		
-		//Constantly move NetworkPlayer to imitate actions of MyPlayer
+		//Move network player
 		Move(dirX, dirY);
-		//Zero out directions to accomodate IF statement in PlayerMove
-		dirX = 0;
-		dirY = 0;
+
 	}
 	
 	//Externally set direction (from Network)

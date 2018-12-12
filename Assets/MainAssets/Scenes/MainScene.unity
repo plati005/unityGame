@@ -895,17 +895,17 @@ Prefab:
     - target: {fileID: 114177382355732428, guid: b090572b8a7e4b44497f9707ea5193dc,
         type: 2}
       propertyPath: settings.url
-      value: glacial-atoll-81614.herokuapp.com/
+      value: localhost
       objectReference: {fileID: 0}
     - target: {fileID: 114177382355732428, guid: b090572b8a7e4b44497f9707ea5193dc,
         type: 2}
       propertyPath: settings.port
-      value: 0
+      value: 3000
       objectReference: {fileID: 0}
     - target: {fileID: 114177382355732428, guid: b090572b8a7e4b44497f9707ea5193dc,
         type: 2}
       propertyPath: settings.sslEnabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114575303820385514, guid: b090572b8a7e4b44497f9707ea5193dc,
         type: 2}

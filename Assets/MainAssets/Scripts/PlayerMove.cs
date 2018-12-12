@@ -7,6 +7,9 @@ public class PlayerMove : Character {
 	//Direction of Player
 	private float dirX, dirY;
 	
+	//Direction of Player to be sent over network
+	private float netX=0, netY=0;
+
 	//Attach NetMove Script
 	private NetMove netMove;
 	
@@ -60,26 +63,23 @@ public class PlayerMove : Character {
 	
 	//Update with Time.deltaTime, overrides Character move, keeping it here for Network movements
 	protected override void FixedUpdate () {
+		//Move my player
+		Move(dirX, dirY);
 		
-		//Here should be my trigger
-		//IF statement exists for performance
-		if (IsMovingTrigger) {
-			Move(dirX, dirY);
+		//Trigger to move on network
+		if (IsMovingChange) {
 			netMove.SendMove(dirX, dirY);
-		}
-		//Else needed for animation to revert to Idle
-		else {
-			Move(0,0);
+			netX = dirX;
+			netY = dirY;
 		}
 		
 	}
 	
-	//Determine if Character was triggered to move via Input specifically
-	private bool IsMovingTrigger {
+	//Determine if there is a change in direction that needs to get sent over the network
+	private bool IsMovingChange {
 		get {
-			return dirX != 0 || dirY != 0;
+			return dirX != netX || dirY != netY;
 		}
 	}
-
 
 }
