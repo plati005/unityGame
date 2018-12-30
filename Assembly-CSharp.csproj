@@ -52,10 +52,12 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\MainAssets\Scripts\Character.cs" />
+     <Compile Include="Assets\MainAssets\Scripts\Explosion.cs" />
      <Compile Include="Assets\MainAssets\Scripts\NetMove.cs" />
      <Compile Include="Assets\MainAssets\Scripts\Network.cs" />
      <Compile Include="Assets\MainAssets\Scripts\NetworkPlayer.cs" />
      <Compile Include="Assets\MainAssets\Scripts\PlayerMove.cs" />
+     <Compile Include="Assets\MainAssets\Scripts\Spell.cs" />
      <Compile Include="Assets\MainAssets\Scripts\Stat.cs" />
      <Compile Include="Assets\MainAssets\Scripts\zCancel - Network.cs" />
      <Compile Include="Assets\MainAssets\Scripts\zCancel - SocketTestWebGL.cs" />

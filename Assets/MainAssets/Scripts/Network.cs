@@ -39,6 +39,8 @@ public class Network : MonoBehaviour {
 		socket.On("disconnected", OnDisconnected);
 		socket.On("requestPosition", OnRequestPosition);
 		socket.On("updatingPosition", OnUpdatingPosition);
+		socket.On("attack", OnAttack);
+		socket.On("face", OnFace);
 		
 		//Instantiate player list
 		otherPlayers = new Dictionary<string, GameObject>();
@@ -54,6 +56,7 @@ public class Network : MonoBehaviour {
 	private void OnRegister (SocketIOEvent e)
 	{
 		Debug.Log ("Succesfully registered player " + e.data);
+		//TODO: Delete this, it's for testing only
 		var purp = block.GetComponent<SpriteRenderer>();
 		purp.color = Color.blue;
 	}
@@ -64,6 +67,7 @@ public class Network : MonoBehaviour {
 		//Debug.Log ("Another player requested position " + e.data);
 		//Debug.Log ("My current position " + LocationToJson(myPlayer.transform.position));
 		//Will update my position on spawning player's screen
+		//TODO: Add direction to this
 		socket.Emit("updatePosition", LocationToJson(myPlayer.transform.position));
 	}
 	
@@ -106,6 +110,35 @@ public class Network : MonoBehaviour {
 		networkMove.SetDirection(float.Parse(playerJson["x"]), float.Parse(playerJson["y"]));
 	}
 	
+	//Method to trigger attack from NetworkPlayer
+	private void OnAttack (SocketIOEvent e)
+	{
+		//Convert string to Json (x, y, id)
+		playerJson = (JSONObject)JSON.Parse(e.data);
+		Debug.Log ("Another player attacked " + playerJson["spell"] + ", " + playerJson["x"] + ", " + playerJson["y"] + ", " + playerJson["id"]);
+		
+		
+		//Get other player by Id and move them
+		var networkAttack = otherPlayers[playerJson["id"]].GetComponent<NetworkPlayer>();
+		Vector2 mousePosition = new Vector2(float.Parse(playerJson["x"]), float.Parse(playerJson["y"]));
+		Debug.Log ("Another player attacked " + int.Parse(playerJson["spell"]) + ", " + mousePosition);
+		networkAttack.AttackTrigger(int.Parse(playerJson["spell"]), mousePosition);
+	}
+	
+		
+	//Method to trigger attack from NetworkPlayer
+	private void OnFace (SocketIOEvent e)
+	{
+		//Convert string to Json (x, y, id)
+		playerJson = (JSONObject)JSON.Parse(e.data);
+		Debug.Log ("Another player faced " + playerJson["dir"] + ", " + playerJson["id"]);
+		
+		
+		//Get other player by Id and move them
+		var networkFace = otherPlayers[playerJson["id"]].GetComponent<NetworkPlayer>();
+		networkFace.FaceDirection(int.Parse(playerJson["dir"]));
+	}
+	
 	//Method to disconnect NetworkPlayer
 	private void OnDisconnected (SocketIOEvent e)
 	{
@@ -126,6 +159,16 @@ public class Network : MonoBehaviour {
 	//Method to convert location to Json format
 	public static string LocationToJson(Vector2 location){
 		return string.Format(@"{{""x"":""{0}"", ""y"":""{1}""}}", location.x, location.y);
+	}
+	
+	//Method to convert location to Json format
+	public static string AttackToJson(int spellNumber, Vector2 location){
+		return string.Format(@"{{""spell"":""{0}"", ""x"":""{1}"", ""y"":""{2}""}}", spellNumber, location.x, location.y);
+	}
+	
+	//Method to convert int to Json format
+	public static string IntToJson(int directionMod){
+		return string.Format(@"{{""dir"":""{0}""}}", directionMod);
 	}
 	
 }

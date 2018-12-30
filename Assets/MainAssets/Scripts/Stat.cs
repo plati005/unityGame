@@ -7,6 +7,9 @@ public class Stat : MonoBehaviour {
 	
 	//The image of the stat
 	private Image content;
+	//The image of the aftereffect
+	[SerializeField]
+	private Image afterEffect;
 
 	//The text of the stat
 	[SerializeField]
@@ -41,10 +44,7 @@ public class Stat : MonoBehaviour {
 	}
 	
 	//Public method to access the max of the stat in case an upgrade needs to change it
-	public float MyMaxValue {
-		get;
-		set;
-	}
+	public float MyMaxValue {get; set;}
 	
 	//Metric for gradually changing the stat instead of immediately
 	[SerializeField]
@@ -52,20 +52,18 @@ public class Stat : MonoBehaviour {
 	
 	//Initialization
 	private void Start () {
-		
-		MyMaxValue = 100;
 		content = GetComponent<Image>();
-		
 	}
 	
 	//Update is called once per frame
 	private void Update () {
-		//TODO:This can be secondary form of moving the stat as aftereffect
-		if (currentFill != content.fillAmount){
-			content.fillAmount = Mathf.Lerp(content.fillAmount, currentFill, Time.deltaTime * lerpSpeed);
+		//Primary form of moving the stat animation
+		content.fillAmount = currentFill;
+		
+		//Move stat aftereffect
+		if (currentFill != afterEffect.fillAmount){
+			afterEffect.fillAmount = Mathf.Lerp(afterEffect.fillAmount, currentFill, Time.deltaTime * lerpSpeed);
 		}
-		//TODO:This should be the primary form of moving the stat
-		//content.fillAmount = currentFill;
 	}
 	
 	public void Initialize(float currentValue, float maxValue)
