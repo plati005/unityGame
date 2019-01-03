@@ -12,7 +12,7 @@ public class Network : MonoBehaviour {
 	public GameObject block;
 	
 	//Json object
-	//TODO: I can use one for spawn, move, and disconnect, but for other actions I will need more
+	//TODO: I can use one for spawn, move, and disconnect, but for other actions I will need more, I can instantiate locally?
 	private JSONObject playerJson;
 	
 	//Create static socket connection

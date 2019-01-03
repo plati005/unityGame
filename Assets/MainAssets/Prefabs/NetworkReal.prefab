@@ -65,7 +65,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings:
-    url: glacial-atoll-81614.herokuapp.com/
+    url: glacial-atoll-81614.herokuapp.com
     port: 0
     sslEnabled: 1
     reconnectTime: 500
@@ -83,5 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ea04f5fbf816647994e962771e6395, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  block: {fileID: 0}
   playerPrefab: {fileID: 1739620103540668, guid: 6a54ea5a3682c38448e57111bb26709e,
     type: 2}
+  myPlayer: {fileID: 0}

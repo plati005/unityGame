@@ -9,12 +9,12 @@ public class Spell : MonoBehaviour {
 	private Vector2 direction;
 	
 	//Determines if spell is homing or not
-	private bool isHoming = false;
+	private bool isHoming = true;
 	
 	//////////Serialized Variables Begin//////////
 	//Spell speed and variables, serialized for ease of tuning
 	[SerializeField]
-	private float speed;
+	private float moveSpeed;
 	
 	//Determines if spell has cast time or is instant cast
 	[SerializeField]
@@ -42,7 +42,7 @@ public class Spell : MonoBehaviour {
 	//////////Serialized Variables Begin//////////
 	
 	//Spell Exits for this time
-	float spellTimer = 2f;
+	float spellTimer = 10f;
 	
 	//Spell Target
 	private GameObject target;
@@ -63,13 +63,16 @@ public class Spell : MonoBehaviour {
 		//TODO: Also this is wrong code for debug only
 		target = GameObject.Find("Object");
 		
+		
+		targetPosition3d.x = TargetPosition.x;
+		targetPosition3d.y = TargetPosition.y;
+		
 		//Initialize direction based on whether spell is homing or not
 		if (isHoming) {
 			direction = target.transform.position - transform.position;
+			myRb.velocity = ((targetPosition3d - transform.position).normalized * moveSpeed/3);
 		}
 		else {
-			targetPosition3d.x = TargetPosition.x;
-			targetPosition3d.y = TargetPosition.y;
 			direction = targetPosition3d - transform.position;
 		}
 		
@@ -86,15 +89,15 @@ public class Spell : MonoBehaviour {
 		if (isHoming) {
 			//TODO: Add 1-2 seconds of spell going forward before anything just to test it
 			direction = target.transform.position - transform.position;
-			myRb.AddForce(direction.normalized * speed);
+			myRb.AddForce(direction.normalized * moveSpeed);
 		}
 		else {
-			myRb.velocity = direction.normalized * speed;
+			myRb.velocity = direction.normalized * moveSpeed;
 		}
 		//Debug.Log("velocity: " + myRb.velocity);
 		
 		//Spell Animation Angle
-		float angle = Mathf.Atan2(direction.y,direction.x) * Mathf.Rad2Deg;
+		float angle = Mathf.Atan2(myRb.velocity.y,myRb.velocity.x) * Mathf.Rad2Deg;
 		transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 	}
 	

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 212629351161632564}
   - component: {fileID: 50975966768973052}
   - component: {fileID: 114074147020766882}
-  - component: {fileID: 61313494205909648}
+  - component: {fileID: 70695596360472124}
   m_Layer: 0
   m_Name: FirePrefab
   m_TagString: Untagged
@@ -64,8 +64,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &61313494205909648
-BoxCollider2D:
+--- !u!70 &70695596360472124
+CapsuleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -76,19 +76,9 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.6, y: 0.18}
-    newSize: {x: 0.54, y: 0.18}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.52, y: 0.12}
-  m_EdgeRadius: 0
+  m_Offset: {x: 0.1, y: 0}
+  m_Size: {x: 0.35, y: 0.13}
+  m_Direction: 1
 --- !u!95 &95441774981715820
 Animator:
   serializedVersion: 3
@@ -117,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 584579a2e05da994a9cd0e715d97fe3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  moveSpeed: 5
   spellCasted: 1
   spellLocked: 0
   spellCastingSpeed: 1

@@ -271,13 +271,8 @@ public abstract class Character : MonoBehaviour {
 	}
 	//Cast spell method overload
 	private void CastSpell(GameObject spellPrefab, Vector2 targetPosition){
-		//TODO: I was right here when I fell asleep because I don't need directionMod as input here, I can calculate it directly from mousePosition
-		//TODO: However, I have directionMod, I need it in all spells. It is worth it to calculate it every time? No, actually yes because otherwise i have to send another variable across
-		//Left - 3
-		//Down - 2
-		//Right - 1
-		//Up - 0
-		//var spellObject = Instantiate(spellPrefab,transform.position, Quaternion.identity);
+		//I have directionMod, but I am recalculating because otherwise I have to send another variable across network
+		//Left - 3/Down - 2/Right - 1/Up - 0
 		int directionMod = SetAimForSpell(targetPosition);
 		var spellObject = Instantiate(spellPrefab,exitPoints[directionMod].position, Quaternion.identity);
 		
