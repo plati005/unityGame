@@ -322,6 +322,16 @@ Prefab:
       propertyPath: socket
       value: 
       objectReference: {fileID: 2073573354}
+    - target: {fileID: 61633470899216270, guid: 9b194af5b3f0ed34e9f411cfbfa572d4,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 61630294888501030, guid: 9b194af5b3f0ed34e9f411cfbfa572d4,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9b194af5b3f0ed34e9f411cfbfa572d4, type: 2}
   m_IsPrefabParent: 0
