@@ -152,6 +152,12 @@ public class PlayerMove : Character {
 		}
 	}
 	
+	//Take damage
+	private void ApplyDamage(float damage) {
+		health.MyCurrentValue -= damage;
+        Debug.Log("damage " + damage);
+    }
+	
 	
 	
 	

@@ -177,7 +177,9 @@ public abstract class Character : MonoBehaviour {
 	//Attack Trigger
 	public bool AttackTrigger(int spellNumber, Vector2 targetPosition) {
 		//TODO: While buff/item, Spellspeed = Spellspeed * characterAttackSpeed modifier, characterAttackSpeed modifier would have to get loaded when Network Player gets loaded
+		//TODO: The characterAttackSpeed will need 3 or more values (melee, ranged, spell) to allow different weapons to apply a different modifier
 		Spell spell = spellPrefabList[spellNumber].GetComponent<Spell>();
+		//TODO: This has to be characterAttackSpeed to allow re-keybinding, but right now it can't be because if faster than melee attack speed it will overwrite animation
 		Spell melee = spellPrefabList[0].GetComponent<Spell>();
 		
 		//Instant
@@ -207,10 +209,12 @@ public abstract class Character : MonoBehaviour {
 		isCasting = true; 
 		isInstantCasting = true;
 		//Yield 2 frames before relocking direction
+		//Note this would only be needed in a 2D since in 3D mouse position would never dictate which way the character is facing
 		yield return new WaitForFixedUpdate();
 		yield return new WaitForFixedUpdate();
 		directionLocked = spellLock;
 		//Trigger attack animation within layer
+		//TODO: spellNumber may not always be 0
 		if (spellNumber == 0) 
 			anim.SetBool("attack", isCasting); 
 		else
@@ -224,9 +228,9 @@ public abstract class Character : MonoBehaviour {
 		//Perform attack
 		//TODO: Melee attack script needed, cannot wait until after yield though, it should happen immediately
 		if (spellNumber == 0) 
-			CastSpell(spellPrefabList[spellNumber]);  
+			MeleeAttack(spellPrefabList[spellNumber], targetPosition);  
 		else
-			CastSpell(spellPrefabList[spellNumber]);  
+			CastSpellTwo(spellPrefabList[spellNumber], targetPosition);  
 		
 		//Finish cast
 		isCasting = false;
@@ -264,24 +268,59 @@ public abstract class Character : MonoBehaviour {
 		directionLocked = false;
 	}
 	
-	//Cast spell
-	private void CastSpell(GameObject spellPrefab){
-		//Instantiate(spellPrefab,transform.position, Quaternion.identity);
-		Debug.Log("Melee attack");
+	
+	//Melee attack - this is in test
+	private void MeleeAttack(GameObject spellPrefab, Vector2 targetPosition){
+		int directionMod = SetAimForSpell(targetPosition);
+		//Get exit point position
+		Vector2 exitPointPosition = new Vector2(exitPoints[directionMod].position.x, exitPoints[directionMod].position.y);
+		//Debug.Log("Melee attack position: " + tempVector1);
+		//Get offset position (using character scale)
+		Vector2 offset = exitPoints[directionMod].GetComponent<CircleCollider2D>().offset;
+		Vector2 scaledOffset = new Vector2(exitPoints[directionMod].transform.parent.parent.localScale.x * offset.x, exitPoints[directionMod].parent.parent.localScale.y * offset.y);
+		//Debug.Log("Melee attack offset: " + tempVector3);
+		//Add exit point position and offset
+		Vector2 tempVector4 = exitPointPosition + scaledOffset;
+		//Debug.Log("Final attack locaiton: " + tempVector4);
+		
+		//TODO: I may be able to write this method in Spell and just call the method
+		Collider2D[] colliders = Physics2D.OverlapCircleAll(tempVector4, 0.27f, 0);
+		foreach (Collider2D c in colliders) {
+			Debug.Log("OverlapCircle: " + c.name);
+		}
 	}
+	
+	//Cast spell
+	//TODO: I think I can merge this with CastSpell and just check if spell is directionMod or targetPosition or not, still going to need seperate space for meleeAttack
+	private void CastSpellTwo(GameObject spellPrefab, Vector2 targetPosition){
+		int directionMod = SetAimForSpell(targetPosition);
+		//Get exit point position
+		Vector2 exitPointPosition = new Vector2(exitPoints[directionMod].position.x, exitPoints[directionMod].position.y);
+		//Debug.Log("Melee attack position: " + tempVector1);
+		//Get offset position (using character scale)
+		Vector2 offset = exitPoints[directionMod].GetComponent<CircleCollider2D>().offset;
+		Vector2 scaledOffset = new Vector2(exitPoints[directionMod].transform.parent.parent.localScale.x * offset.x, exitPoints[directionMod].parent.parent.localScale.y * offset.y);
+		//Debug.Log("Melee attack offset: " + tempVector3);
+		//Add exit point position and offset
+		Vector2 tempVector4 = exitPointPosition + scaledOffset;
+		//Debug.Log("Final attack locaiton: " + tempVector4);
+
+		
+		var spellObject = Instantiate(spellPrefab, tempVector4, Quaternion.identity, transform);
+		spellObject.GetComponent<Spell>().TargetPosition = targetPosition;
+	}
+	
+	
 	//Cast spell method overload
 	private void CastSpell(GameObject spellPrefab, Vector2 targetPosition){
 		//I have directionMod, but I am recalculating because otherwise I have to send another variable across network
 		//Left - 3/Down - 2/Right - 1/Up - 0
 		int directionMod = SetAimForSpell(targetPosition);
-		var spellObject = Instantiate(spellPrefab,exitPoints[directionMod].position, Quaternion.identity);
+		var spellObject = Instantiate(spellPrefab,exitPoints[directionMod].position, Quaternion.identity, transform); //Note: Unintended move of object happens when player moves becasue it's instantiated as a child. This is actively ignored.
 		
 		spellObject.GetComponent<Spell>().TargetPosition = targetPosition;
 	}
 	//////////Attack End//////////
 	
-	//Take damage
-	private void ApplyDamage(float damage) {
-        Debug.Log("damage " + damage);
-    }
+
 }

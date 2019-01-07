@@ -267,8 +267,8 @@ MonoBehaviour:
 GameObject:
   m_PrefabParentObject: {fileID: 1225524178121400, guid: 9b194af5b3f0ed34e9f411cfbfa572d4,
     type: 2}
-  m_PrefabInternal: {fileID: 307430656}
---- !u!1001 &307430656
+  m_PrefabInternal: {fileID: 339121990}
+--- !u!1001 &339121990
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -322,15 +322,10 @@ Prefab:
       propertyPath: socket
       value: 
       objectReference: {fileID: 2073573354}
-    - target: {fileID: 61633470899216270, guid: 9b194af5b3f0ed34e9f411cfbfa572d4,
+    - target: {fileID: 212468633720001690, guid: 9b194af5b3f0ed34e9f411cfbfa572d4,
         type: 2}
-      propertyPath: m_Enabled
+      propertyPath: m_SortingOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 61630294888501030, guid: 9b194af5b3f0ed34e9f411cfbfa572d4,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9b194af5b3f0ed34e9f411cfbfa572d4, type: 2}

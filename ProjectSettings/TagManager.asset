@@ -4,7 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - FriendlyBullet
+  - Enemy
+  - Spell
+  - Exits
   layers:
   - Default
   - TransparentFX

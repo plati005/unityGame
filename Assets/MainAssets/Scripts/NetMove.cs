@@ -13,21 +13,21 @@ public class NetMove : MonoBehaviour {
 	
 	//Move the Character for other people
 	public void SendMove(float x, float y) {
-		Debug.Log("sending position to node: " + Network.DirectionsToJson(x,y));
+		//Debug.Log("sending position to node: " + Network.DirectionsToJson(x,y));
 		//Send position to server
 		socket.Emit("move", Network.DirectionsToJson(x,y));
 	}
 	
 	//Face the Character for other people
 	public void SendDirectionMod(int directionMod) {
-		Debug.Log("sending face to node: " + directionMod);
+		//Debug.Log("sending face to node: " + directionMod);
 		//Send face to server
 		socket.Emit("face", Network.IntToJson(directionMod));
 	}
 	
 	//Send attack to other people
 	public void SendAttackTrigger(int spellNumber, Vector2 mouseLocation){
-		Debug.Log("sending attack to node: " + Network.AttackToJson(spellNumber, mouseLocation));
+		//Debug.Log("sending attack to node: " + Network.AttackToJson(spellNumber, mouseLocation));
 		socket.Emit("attack", Network.AttackToJson(spellNumber, mouseLocation));
 	}
 	
